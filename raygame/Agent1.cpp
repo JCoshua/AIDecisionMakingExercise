@@ -1,5 +1,6 @@
 #include "Agent1.h"
 #include "SpriteComponent.h"
+#include "SeekJComponent.h"
 #include "Goal.h"
 #include "GameManager.h"
 
@@ -17,6 +18,7 @@ void Agent1::start()
 {
 	Character::start();
 	//add steering behaviours here
+	addComponent<SeekJComponent>(GameManager::getBall(), 200)
 }
 
 void Agent1::update(float deltaTime)

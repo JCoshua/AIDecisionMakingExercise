@@ -1,5 +1,7 @@
 #include "Agent1.h"
 #include "SpriteComponent.h"
+#include "SeekJComponent.h"
+#include "Transform2D.h"
 #include "Goal.h"
 #include "GameManager.h"
 
@@ -17,6 +19,9 @@ void Agent1::start()
 {
 	Character::start();
 	//add steering behaviours here
+	Actor* ball = new Actor();
+	ball->getTransform()->setWorldPostion(GameManager::getInstance()->getBallPosition());
+	addComponent(new SeekJComponent(ball, 500));
 }
 
 void Agent1::update(float deltaTime)

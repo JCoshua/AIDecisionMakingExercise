@@ -167,6 +167,7 @@
     <ClCompile Include="ScoreBoard.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
+    <ClCompile Include="SteeringComponentKW.cpp" />
     <ClCompile Include="Transform2D.cpp" />
     <ClCompile Include="UITextComponent.cpp" />
   </ItemGroup>
@@ -192,6 +193,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="SteeringComponent.h" />
+    <ClInclude Include="SteeringComponentKW.h" />
     <ClInclude Include="Transform2D.h" />
     <ClInclude Include="UITextComponent.h" />
   </ItemGroup>

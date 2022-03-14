@@ -1,6 +1,7 @@
 #include "Agent1.h"
 #include "SpriteComponent.h"
 #include "SeekJComponent.h"
+#include "MoveComponent.h"
 #include "Transform2D.h"
 #include "Goal.h"
 #include "GameManager.h"
@@ -28,9 +29,7 @@ void Agent1::start()
 	evasiveRadius->setCollider(new CircleCollider(200, evasiveRadius));
 
 	//add steering behaviours here
-	Actor* ball = new Actor();
-	ball->getTransform()->setWorldPostion(GameManager::getInstance()->getBallPosition());
-	addComponent(new SeekJComponent(ball, 500));
+	addComponent(new SeekJComponent(GameManager::getInstance()->getBall(), 199));
 	
 }
 
@@ -41,18 +40,43 @@ void Agent1::update(float deltaTime)
 	GameManager* gameState = GameManager::getInstance();
 
 	if (getHasBall())
-		getComponent<SeekJComponent>()->setTarget(gameState->getRightGoal());
-
-	else if (m_currentMines < m_maxMines && m_mineTimer > 2)
 	{
-		float randNum = rand();
-		MathLibrary::Vector2 randPosition = MathLibrary::Vector2(sin(randNum), cos(randNum)).getNormalized() * 100;
-		randPosition = gameState->getAgent2()->getTransform()->getWorldPosition() + randPosition;
+		if (m_mineTimer > 0.3f)
+		{
+			MathLibrary::Vector2 mineLocation = gameState->getRightGoal()->getTransform()->getWorldPosition() - getTransform()->getWorldPosition();
+			mineLocation = (mineLocation.getNormalized() * (mineLocation.getMagnitude() / 10)) + getTransform()->getWorldPosition();
+			float randNum = rand();
+			MathLibrary::Vector2 randPosition = MathLibrary::Vector2(sin(randNum), cos(randNum)).getNormalized() * 50;
+			mineLocation = mineLocation + randPosition;
 
-		Landmine* landmine = new Landmine(randPosition, this);
+			Landmine* landmine = new Landmine(mineLocation, this);
+			m_mineTimer = 0;
+		}
+		getComponent<SeekJComponent>()->setTarget(gameState->getRightGoal());
+	}
+	else if (gameState->getAgent2()->getHasBall() && m_currentMines < m_maxMines && m_mineTimer > 0.7f)
+	{
+		MathLibrary::Vector2 mineLocation = gameState->getLeftGoal()->getTransform()->getWorldPosition() - gameState->getAgent2()->getTransform()->getWorldPosition();
+		mineLocation = (mineLocation.getNormalized() / (mineLocation.getMagnitude())) + gameState->getAgent2()->getTransform()->getWorldPosition();
+		float randNum = rand();
+		MathLibrary::Vector2 randPosition = MathLibrary::Vector2(sin(randNum), cos(randNum)).getNormalized() * 10;
+		mineLocation = mineLocation + randPosition;
+
+		Landmine* landmine = new Landmine(mineLocation, this);
 		m_mineTimer = 0;
 	}
+	else if(m_mineTimer > 1)
+	{
+		MathLibrary::Vector2 mineLocation = gameState->getBall()->getTransform()->getWorldPosition() - gameState->getAgent2()->getTransform()->getWorldPosition();
+		mineLocation = (mineLocation.getNormalized() * (mineLocation.getMagnitude() / 3)) + gameState->getAgent2()->getTransform()->getWorldPosition();
 
+		float randNum = rand();
+		MathLibrary::Vector2 randPosition = MathLibrary::Vector2(sin(randNum), cos(randNum)).getNormalized() * 50;
+		mineLocation = mineLocation + randPosition;
+
+		Landmine* landmine = new Landmine(mineLocation, this);
+		m_mineTimer = 0;
+	}
 	m_mineTimer += deltaTime;
 }
 

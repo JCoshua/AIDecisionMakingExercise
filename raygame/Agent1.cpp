@@ -23,10 +23,10 @@ void Agent1::start()
 	Character::start();
 
 	//Evasion Radius
-	Actor* evasiveRadius = new Actor();
-	evasiveRadius->getTransform()->setWorldPostion(getTransform()->getWorldPosition());
-	getTransform()->addChild(evasiveRadius->getTransform());
-	evasiveRadius->setCollider(new CircleCollider(200, evasiveRadius));
+	m_flareActor = new Actor();
+	m_flareActor->getTransform()->setWorldPostion(getTransform()->getWorldPosition());
+	getTransform()->addChild(m_flareActor->getTransform());
+	m_flareActor->setCollider(new CircleCollider(200, m_flareActor));
 
 	//add steering behaviours here
 	addComponent(new SeekJComponent(GameManager::getInstance()->getBall(), 199));
@@ -67,12 +67,26 @@ void Agent1::update(float deltaTime)
 	}
 	else if(m_mineTimer > 1)
 	{
-		MathLibrary::Vector2 mineLocation = gameState->getBall()->getTransform()->getWorldPosition() - gameState->getAgent2()->getTransform()->getWorldPosition();
-		mineLocation = (mineLocation.getNormalized() * (mineLocation.getMagnitude() / 3)) + gameState->getAgent2()->getTransform()->getWorldPosition();
+		MathLibrary::Vector2 mineLocation;
+		bool minePlaced = false;
+		for (int i = 0; i < Engine::getCurrentScene()->getActors().getLength(); i++)
+		{
+			minePlaced = m_flareActor->checkForCollision(Engine::getCurrentScene()->getActor(i));
+			if (minePlaced)
+			{
+				mineLocation = Engine::getCurrentScene()->getActor(i)->getTransform()->getWorldPosition();
+			}
+		}
 
-		float randNum = rand();
-		MathLibrary::Vector2 randPosition = MathLibrary::Vector2(sin(randNum), cos(randNum)).getNormalized() * 50;
-		mineLocation = mineLocation + randPosition;
+		if (!minePlaced)
+		{
+			mineLocation = gameState->getBall()->getTransform()->getWorldPosition() - gameState->getAgent2()->getTransform()->getWorldPosition();
+			mineLocation = (mineLocation.getNormalized() * (mineLocation.getMagnitude() / 3)) + gameState->getAgent2()->getTransform()->getWorldPosition();
+
+			float randNum = rand();
+			MathLibrary::Vector2 randPosition = MathLibrary::Vector2(sin(randNum), cos(randNum)).getNormalized() * 50;
+			mineLocation = mineLocation + randPosition;
+		}
 
 		Landmine* landmine = new Landmine(mineLocation, this);
 		m_mineTimer = 0;

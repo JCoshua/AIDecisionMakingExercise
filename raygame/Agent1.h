@@ -25,5 +25,6 @@ private:
     float m_mineTimer = 0;
     int m_maxMines = 20;
     int m_currentMines;
+    Actor* m_flareActor;
 };
 

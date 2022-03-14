@@ -1,6 +1,7 @@
 #include "Agent1.h"
 #include "SpriteComponent.h"
 #include "SeekJComponent.h"
+#include "EvadeJComponent.h"
 #include "MoveComponent.h"
 #include "Transform2D.h"
 #include "Goal.h"
@@ -29,8 +30,8 @@ void Agent1::start()
 	m_flareActor->setCollider(new CircleCollider(200, m_flareActor));
 
 	//add steering behaviours here
-	addComponent(new SeekJComponent(GameManager::getInstance()->getBall(), 200));
-	
+	addComponent(new SeekJComponent(GameManager::getInstance()->getBall(), 75));
+	addComponent(new EvadeJComponent(nullptr, 0));
 }
 
 void Agent1::update(float deltaTime)
@@ -53,6 +54,7 @@ void Agent1::update(float deltaTime)
 			m_mineTimer = 0;
 		}
 		getComponent<SeekJComponent>()->setTarget(gameState->getRightGoal());
+		getComponent<EvadeJComponent>()->setSteeringForce(0);
 	}
 	else if (gameState->getAgent2()->getHasBall() && m_currentMines < m_maxMines && m_mineTimer > 0.7f)
 	{
@@ -64,6 +66,7 @@ void Agent1::update(float deltaTime)
 
 		Landmine* landmine = new Landmine(mineLocation, this);
 		m_mineTimer = 0;
+		getComponent<EvadeJComponent>()->setSteeringForce(0);
 	}
 	else if(m_mineTimer > 1)
 	{
@@ -74,6 +77,8 @@ void Agent1::update(float deltaTime)
 			minePlaced = m_flareActor->checkForCollision(Engine::getCurrentScene()->getActor(i));
 			if (minePlaced)
 			{
+				getComponent<EvadeJComponent>()->setTarget(Engine::getCurrentScene()->getActor(i));
+				getComponent<EvadeJComponent>()->setSteeringForce(30);
 				mineLocation = Engine::getCurrentScene()->getActor(i)->getTransform()->getWorldPosition();
 			}
 		}
@@ -86,6 +91,7 @@ void Agent1::update(float deltaTime)
 			float randNum = rand();
 			MathLibrary::Vector2 randPosition = MathLibrary::Vector2(sin(randNum), cos(randNum)).getNormalized() * 50;
 			mineLocation = mineLocation + randPosition;
+			getComponent<EvadeJComponent>()->setSteeringForce(0);
 		}
 
 		Landmine* landmine = new Landmine(mineLocation, this);

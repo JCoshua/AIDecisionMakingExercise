@@ -29,7 +29,7 @@ void Agent1::start()
 	m_flareActor->setCollider(new CircleCollider(200, m_flareActor));
 
 	//add steering behaviours here
-	addComponent(new SeekJComponent(GameManager::getInstance()->getBall(), 199));
+	addComponent(new SeekJComponent(GameManager::getInstance()->getBall(), 200));
 	
 }
 
@@ -90,6 +90,12 @@ void Agent1::update(float deltaTime)
 
 		Landmine* landmine = new Landmine(mineLocation, this);
 		m_mineTimer = 0;
+	}
+
+	if (gameState->getAgent2Points() == 2)
+	{
+		getComponent<MoveComponent>()->setMaxSpeed(75);
+		m_mineTimer += deltaTime;
 	}
 	m_mineTimer += deltaTime;
 }

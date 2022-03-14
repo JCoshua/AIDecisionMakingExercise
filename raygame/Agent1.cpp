@@ -66,6 +66,7 @@ void Agent1::update(float deltaTime)
 
 		Landmine* landmine = new Landmine(mineLocation, this);
 		m_mineTimer = 0;
+		getComponent<SeekJComponent>()->setTarget(gameState->getAgent2());
 		getComponent<EvadeJComponent>()->setSteeringForce(0);
 	}
 	else if(m_mineTimer > 1)
@@ -94,6 +95,7 @@ void Agent1::update(float deltaTime)
 			getComponent<EvadeJComponent>()->setSteeringForce(0);
 		}
 
+		getComponent<SeekJComponent>()->setTarget(gameState->getBall());
 		Landmine* landmine = new Landmine(mineLocation, this);
 		m_mineTimer = 0;
 	}

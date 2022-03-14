@@ -23,6 +23,7 @@ void Agent2::start()
 	//add seek component
 	addComponent<SeekComponentKW>();
 	getComponent<SeekComponentKW>()->setTarget(GameManager::getInstance()->getBall());
+	getComponent<SeekComponentKW>()->setSteeringForce(500);
 	getComponent<SeekComponentKW>()->start();
 
 	addComponent<StateMachineComponentsKW>();
@@ -32,7 +33,10 @@ void Agent2::start()
 void Agent2::update(float deltaTime)
 {
 	Character::update(deltaTime);
-
+	if (getHasBall())
+	{
+		getComponent<SeekComponentKW>()->setTarget(GameManager::getInstance()->getRightGoal());
+	}
 	getComponent<StateMachineComponentsKW>()->update(deltaTime);
 }
 

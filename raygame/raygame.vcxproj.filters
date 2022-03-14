@@ -86,6 +86,12 @@
     <ClCompile Include="SeekJComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EvadeJComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Landmine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene.h">
@@ -158,6 +164,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SeekJComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EvadeJComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Landmine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

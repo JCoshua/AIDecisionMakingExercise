@@ -13,14 +13,6 @@ class Landmine :
 {
 
 public:
-	Landmine(MathLibrary::Vector2 spawnLocation) : Actor::Actor(spawnLocation.x, spawnLocation.y, "Landmine")
-	{
-		getTransform()->setScale({ 50,50 });
-		addComponent(new SpriteComponent("Images/bullet.png"));
-		Engine::getCurrentScene()->addActor(this);
-		setCollider(new CircleCollider(200, this));
-	}
-
 	Landmine(MathLibrary::Vector2 spawnLocation, Agent1* owner) : Actor::Actor(spawnLocation.x, spawnLocation.y, "Landmine")
 	{
 		getTransform()->setScale({ 50,50 });
@@ -28,7 +20,7 @@ public:
 		Engine::getCurrentScene()->addActor(this);
 		m_owner = owner;
 		owner->setCurrentMines(owner->getCurrentMines() + 1);
-		setCollider(new CircleCollider(5000, this));
+		setCollider(new CircleCollider(200, this));
 	}
 
 	~Landmine()

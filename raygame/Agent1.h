@@ -13,11 +13,18 @@ public:
     /// <param name="health">The amount of health this character has</param>
     Agent1(float x, float y, const char* name, float maxForce, float maxSpeed, float health);
 
+    int getCurrentMines() { return m_currentMines; }
+    void setCurrentMines(int mineCount) { m_currentMines = mineCount; }
     // Inherited from the Character class
     virtual void onCollision(Actor* actor) override;
     virtual void start() override;
     virtual void update(float deltaTime) override;
     virtual void onDeath();
     virtual void onDamageRecieved() {};
+private:
+    float m_mineTimer = 0;
+    int m_maxMines = 20;
+    int m_currentMines;
+    Actor* m_flareActor;
 };
 

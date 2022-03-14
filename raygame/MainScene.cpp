@@ -10,6 +10,7 @@
 #include "Goal.h"
 #include "GameManager.h"
 #include "ScoreBoard.h"
+#include "SeekComponentKW.h"
 #include "Engine.h"
 
 void MainScene::start()

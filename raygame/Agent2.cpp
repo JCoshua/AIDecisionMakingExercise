@@ -1,5 +1,7 @@
 #include "Agent2.h"
+#include <string.h>
 #include "SpriteComponent.h"
+#include "StateMachineComponentsKW.h"
 #include "GameManager.h"
 #include "Goal.h"
 #include "SeekComponentKW.h"
@@ -16,18 +18,25 @@ void Agent2::onCollision(Actor* actor)
 
 void Agent2::start()
 {
-	Character::start(); 
+	Character::start();
+
+	//add seek component
 	addComponent<SeekComponentKW>();
+	getComponent<SeekComponentKW>()->setTarget(GameManager::getInstance()->getBall());
+	getComponent<SeekComponentKW>()->start();
+
+	addComponent<StateMachineComponentsKW>();
+	getComponent<StateMachineComponentsKW>()->start();
 }
 
 void Agent2::update(float deltaTime)
 {
 	Character::update(deltaTime);
 
+	getComponent<StateMachineComponentsKW>()->update(deltaTime);
 }
 
 void Agent2::onDeath()
 {
 	Character::onDeath();
-
 }

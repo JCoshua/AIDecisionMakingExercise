@@ -5,8 +5,7 @@ class SeekComponentKW;
 
 enum State
 {
-    SEEKBALL,
-    SEEKGOAL,
+    SEEK,
     ATTACKENEMY
 };
 
